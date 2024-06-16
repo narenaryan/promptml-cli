@@ -1,0 +1,86 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "promptml-cli"
+dynamic = ["version"]
+description = 'A CLI tool to run PromptML scripts'
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = [
+    "artificial-intelligence",
+    "prompt-engineering",
+    "dsl",
+    "language",
+    "generative-ai",
+    "promptml",
+    "promptml-cli",
+]
+authors = [
+    { name = "Vidura Labs Inc.", email = "contact@vidura.ai" },
+    { name = "Naren Yellavula", email = "naren.yellavula@gmail.com" },
+]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+
+dependencies = [
+    "promptml==0.6.1",
+    "openai==1.33.0",
+    "rich==13.7.1",
+    "google-generativeai==0.6.0",
+]
+
+[project.urls]
+Documentation = "https://github.com/narenaryan/promptml-cli/blob/main/README.md"
+Issues = "https://github.com/narenaryan/promptml-cli/issues"
+Source = "https://github.com/narenaryan/promptml-cli/"
+
+[tool.hatch.version]
+path = "src/promptml_cli/__about__.py"
+
+[tool.hatch.envs.default]
+dependencies = ["coverage[toml]>=6.5", "pytest"]
+[tool.hatch.envs.default.scripts]
+test = "pytest {args:tests}"
+test-cov = "coverage run -m pytest {args:tests}"
+cov-report = ["- coverage combine", "coverage report"]
+cov = ["test-cov", "cov-report"]
+
+[[tool.hatch.envs.all.matrix]]
+python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
+[tool.hatch.envs.types]
+dependencies = ["mypy>=1.0.0"]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/promptml_cli tests}"
+
+[tool.coverage.run]
+source_pkgs = ["promptml_cli", "tests"]
+branch = true
+parallel = true
+omit = ["src/promptml_cli/__about__.py"]
+
+[tool.coverage.paths]
+promptml-cli = ["src/promptml_cli"]
+tests = ["tests", "*/promptml_cli/tests"]
+
+[tool.coverage.report]
+exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
+
+[project.scripts]
+promptml-cli = "promptml_cli.main:run"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/promptml_cli"]
