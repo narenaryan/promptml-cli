@@ -5,6 +5,8 @@ A CLI application to run PromptML scripts against LLMs.
 ```bash
 pip install --upgrade promptml-cli
 ```
+## Demo
+[![asciicast](https://asciinema.org/a/664270.svg)](https://asciinema.org/a/664270)
 
 ## Usage
 ```bash
