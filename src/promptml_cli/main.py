@@ -129,11 +129,11 @@ def run():
                         continue
                     message += chunk
                     markdown_content = Markdown(message, "\n")
-                    panel = Panel(markdown_content, border_style=neon_blue, safe_box=True)
-                    live.update(panel)
+                    live.update(markdown_content)
 
     if not args.raw:
-        console.print(f"\nTime taken: {time.time() - now} seconds", style="bold green")
+        time_taken = round(time.time() - now, 2)
+        console.print(f"\nTime taken: {time_taken} seconds", style="bold green")
 
 if __name__ == '__main__':
     run()
