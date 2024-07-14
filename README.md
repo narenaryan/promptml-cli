@@ -5,14 +5,17 @@ A CLI application to run PromptML scripts against LLMs.
 ```bash
 pip install --upgrade promptml-cli
 ```
+
+This installs a command called `procli`.
+
 ## Demo
 [![asciicast](https://asciinema.org/a/664270.svg)](https://asciinema.org/a/664270)
 
 ## Usage
 ```bash
-promptml-cli --help
+procli --help
 
-usage: promptml-cli [-h] -f FILE [-m MODEL] [-s {xml,json,yaml}] [-p {openai,google}] [--stream] [--raw]
+usage: procli [-h] -f FILE [-m MODEL] [-s {xml,json,yaml}] [-p {openai,google}] [--stream] [--raw]
 
 A Command Line Interface (CLI) tool to run Prompt Markup Language (PromptML) files with popular Generative AI models
 
@@ -73,7 +76,7 @@ export GOOGLE_API_KEY=your-google-api-key
 3. Run the PromptML file with the following command in terminal:
 
 ```bash
-promptml-cli -f character.pml -m gpt-4o
+procli -f character.pml -m gpt-4o
 ```
 
 You will see the respective output on terminal:
@@ -118,5 +121,5 @@ promptml-cli -f character.pml -p google --raw
 Note: Raw output is useful when you want to save the output to a file or pipe it to another command.
 
 ## TODO
-- Add support for Claude, Cohere & A21 Labs GenAI models
+- Add support for Ollama, Claude, Cohere & A21 Labs GenAI models
 - Add tests

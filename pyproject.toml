@@ -80,7 +80,7 @@ tests = ["tests", "*/promptml_cli/tests"]
 exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
 
 [project.scripts]
-promptml-cli = "promptml_cli.main:run"
+procli = "promptml_cli.main:run"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/promptml_cli"]
