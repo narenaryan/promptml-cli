@@ -12,7 +12,7 @@ from rich.live import Live
 from rich.style import Style
 from rich import box
 from promptml_cli.generation import get_sync_response, get_stream_response
-from promptml_cli.client import Provider
+from promptml_cli.client import Provider, Model
 
 @click.group()
 def cli():
@@ -22,16 +22,15 @@ def cli():
 @click.option('-f', '--file', required=True, type=click.Path(exists=True), help='Path to the PromptML(.pml) file')
 @click.option('-m', '--model', default='gpt-4o', type=click.STRING, help='Model to use for the completion')
 @click.option('-s', '--serializer', default='xml', type=click.Choice(['xml', 'json', 'yaml']), help='Serializer to use for the completion. Default is `xml`')
-@click.option('-p', '--provider', default=Provider.OPENAI.value, type=click.Choice([Provider.OPENAI.value, Provider.GOOGLE.value]), help='GenAI provider to use for the completion. Default is `openai`')
-@click.option('--stream', default=True, is_flag=True, help='Stream chunks for the GenAI response. Default is non-streaming response.')
-@click.option('--raw', is_flag=True, help='Return raw output from LLM (best for saving into files or piping)')
-def run(file, model, serializer, provider, stream, raw):
+@click.option('-p', '--provider', default=Provider.OPENAI.value, type=click.Choice([Provider.OPENAI.value, Provider.GOOGLE.value, Provider.OLLAMA.value]), help='GenAI provider to use for the completion. Default is `openai`')
+@click.option('--no-stream', default=False, is_flag=True, help='Get whole GenAI response. Default is streaming response.')
+@click.option('--raw', default=False, is_flag=True, help='Return raw output from LLM (best for saving into files or piping)')
+def run(file, model, serializer, provider, no_stream, raw):
     console = Console(
         color_system="truecolor",
         record=True,
     )
     neon_blue = Style(color="cyan", bold=True)
-
     # Parse the PromptML file
     parser = PromptParserFromFile(file)
     parser.parse()
@@ -48,14 +47,13 @@ def run(file, model, serializer, provider, stream, raw):
         serialized_data = parser.to_xml()
 
     now = time.time()
-    if not stream:
+    if no_stream:
         try:
             response = get_sync_response(
                 model=model,
                 file=file,
                 serialized_data=serialized_data,
                 provider=provider,
-                stream=stream,
                 raw=raw
             )
         except Exception as e:
@@ -70,6 +68,8 @@ def run(file, model, serializer, provider, stream, raw):
             print(response)
         else:
             console.print(Panel(Markdown(response)))
+            time_taken = round(time.time() - now, 2)
+            console.print(f"\nTime taken: {time_taken} seconds", style="bold green")
     else:
         with Live(refresh_per_second=4) as live:
             message = ""
@@ -78,7 +78,6 @@ def run(file, model, serializer, provider, stream, raw):
                     file=file,
                     serialized_data=serialized_data,
                     provider=provider,
-                    stream=stream,
                     raw=raw
             ):
                 if chunk:
@@ -91,6 +90,7 @@ def run(file, model, serializer, provider, stream, raw):
 
             time_taken = round(time.time() - now, 2)
             console.print(f"\nTime taken: {time_taken} seconds", style="bold green")
+
 
 if __name__ == '__main__':
     cli()
