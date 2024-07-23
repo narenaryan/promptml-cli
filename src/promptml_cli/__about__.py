@@ -1,2 +1,2 @@
 # pylint: disable=invalid-name
-version = "0.2.2"
+version = "1.0.0"
