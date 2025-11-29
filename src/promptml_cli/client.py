@@ -1,11 +1,9 @@
 """GenAI client module."""
 
+import click
 import os
 import enum
 from typing import Union
-
-from openai import OpenAI
-import google.generativeai as genai
 
 class Model(enum.Enum):
     """GenAI model enum class."""
@@ -29,10 +27,18 @@ class ClientFactory:
     def get_client(self) -> Union[OpenAI, genai.GenerativeModel, None]:
         """Get the client based on the provider."""
         if self.provider == Provider.OPENAI.value:
+            try:
+                from openai import OpenAI
+            except ImportError:
+                raise click.UsageError("Error: Python module OpenAI is not installed")
             return OpenAI(
                 api_key=os.environ.get("OPENAI_API_KEY"),
             )
         if self.provider == Provider.GOOGLE.value:
+            try:
+                import google.generativeai as genai
+            except ImportError:
+                raise click.UsageError("Error: Python module google.generativeai is not installed")
             genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
             return genai.GenerativeModel(self.model)
 

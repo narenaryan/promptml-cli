@@ -3,7 +3,7 @@ A CLI application to run PromptML scripts against LLMs.
 
 ## Installation
 ```bash
-pip install --upgrade promptml-cli
+pip install --upgrade 'promptml-cli[google,openai]
 ```
 
 This installs a command called `procli`.
