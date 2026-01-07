@@ -46,7 +46,7 @@ google = [
     "google-generativeai>=0.6.0",
 ]
 openai = [
-    "google-generativeai>=1.33.0",
+    "openai>=1.33.0",
 ]
 
 [project.urls]
